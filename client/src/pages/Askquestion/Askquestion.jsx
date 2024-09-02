@@ -1,40 +1,42 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import './Askquestion.css'
 import { useNavigate } from 'react-router-dom'
-
-
+import { useSelector, useDispatch } from "react-redux"
+import { askquestion } from '../../action/question'
 const Askquestion = () => {
     const navigate = useNavigate();
-    const user = 1;
-    const[questiontitle,setquestiontitle]=useState("");
-    const[questionbody,setquestionbody]=useState("");
-    const[questiontag,setquestiontags]=useState("");
-const handlesubmit=(e)=>{
-    e.preventDefault();
-    if (user) {
-        if (questionbody && questiontitle && questiontag) {
-            alert("you have successfuly posted a question")
+    const dispatch=useDispatch();
+    const user = useSelector((state)=>state.currentuserreducer)
+    const [questiontitle, setquestiontitle] = useState("");
+    const [questionbody, setquestionbody] = useState("");
+    const [questiontag, setquestiontags] = useState("")
+    const handlesubmit = (e) => {
+        e.preventDefault();
+        if (user) {
+            if (questionbody && questiontitle && questiontag) {
+                dispatch(askquestion({questiontitle,questionbody,questiontag,userposted:user.result.name},navigate))
+                alert("you have successfuly posted a question")
 
+            } else {
+                alert("Please enter all the fields")
+            }
         } else {
-            alert("Please enter all the fields")
+            alert("Login to ask question")
         }
-    } else {
-        alert("Login to ask question")
     }
-}
-const handleenter = (e) => {
-    if (e.code === 'Enter') {
-        setquestionbody(questionbody + "\n");
+    const handleenter = (e) => {
+        if (e.code === 'Enter') {
+            setquestionbody(questionbody + "\n");
+        }
     }
-}
 
     return (
         <div className="ask-question">
             <div className="ask-ques-container">
-                <h1>Ask a public question</h1>
+                <h1>Ask a public Question</h1>
                 <form onSubmit={handlesubmit}>
                     <div className="ask-form-container">
-                        <label htmlfor="ask-ques-title">
+                        <label htmlFor="ask-ques-title">
                             <h4>Title</h4>
                             <p>Be specific and imagine you're asking a question to another person</p>
                             <input type="text" id="ask-ques-title"
@@ -65,8 +67,8 @@ const handleenter = (e) => {
                         </label>
                     </div>
                     <input type="submit"
-                    value="Review your question"
-                    className='review-btn' />
+                        value="Review your question"
+                        className='review-btn' />
                 </form>
             </div>
         </div>
